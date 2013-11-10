@@ -13,5 +13,5 @@
         "scripts": ["background.js"]
     },
     "options_page": "options.html",
-    "permissions": ["storage", "notifications", "<all_urls>"]
+    "permissions": ["tabs", "storage", "notifications", "<all_urls>"]
 }
