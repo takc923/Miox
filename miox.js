@@ -3,7 +3,7 @@ document.onreadystatechange = function () {
     if (document.readyState != "complete") return;
     chrome.storage.sync.get("mioUrl", function(items) {
         if (! isMioHome(items.mioUrl)) return;
-        document.querySelector(".tweets").addEventListener("DOMNodeInserted",function(){
+        document.querySelector(".tweets").addEventListener("DOMSubtreeModified",function(){
             incrementTitleUnreadCount();
             notice(this);
         });
