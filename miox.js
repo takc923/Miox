@@ -32,7 +32,7 @@ function notice(tweets) {
                 options: {
                     type: "basic",
                     title: tweets.querySelector(".user").textContent.trim(),
-                    message: tweets.querySelector(".body").innerHTML,
+                    message: tweets.querySelector(".body").textContent,
                     iconUrl: tweets.querySelector("img").src
                 }
             }
