@@ -3,9 +3,16 @@ document.onreadystatechange = function () {
     if (document.readyState != "complete") return;
     chrome.storage.sync.get("mioUrl", function(items) {
         if (! isMioHome(items.mioUrl)) return;
-        document.querySelector(".tweets").addEventListener("DOMSubtreeModified",function(){
-            incrementTitleUnreadCount();
-            notice(this);
+
+        var tweets = document.querySelector(".tweets ul");
+        tweets.addEventListener("DOMSubtreeModified",function(){
+            chrome.runtime.sendMessage({
+                action: "isActive"
+            }, function(res){
+                if (res.isActive) return;
+                incrementTitleUnreadCount();
+                notice();
+            });
         });
 
         window.addEventListener("focus", function (){
@@ -21,19 +28,19 @@ document.onreadystatechange = function () {
     });
 };
 
-function notice(tweets) {
+function notice() {
     chrome.storage.sync.get("isNotificationEnabled", function(items) {
         if (! items.isNotificationEnabled) return;
 
         chrome.runtime.sendMessage({
             action : "notice",
             args: {
-                id: tweets.querySelector(".tweet").id,
+                id: document.querySelector(".tweet").id,
                 options: {
                     type: "basic",
-                    title: tweets.querySelector(".user").textContent.trim(),
-                    message: tweets.querySelector(".body").textContent,
-                    iconUrl: tweets.querySelector("img").src
+                    title: document.querySelector(".tweet .user").textContent.trim(),
+                    message: document.querySelector(".tweet .body").textContent,
+                    iconUrl: document.querySelector(".tweet img").src
                 }
             }
         });
@@ -48,5 +55,5 @@ function incrementTitleUnreadCount() {
 function isMioHome(mioUrl) {
     var currentPage = document.querySelector(".page.current");
     return mioUrl != undefined && location.href.indexOf(mioUrl) != -1
-    && currentPage && currentPage.innerHTML.trim() == "1";
+        && currentPage && currentPage.innerHTML.trim() == "1";
 }
