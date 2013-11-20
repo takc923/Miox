@@ -39,7 +39,7 @@ function notice() {
                 options: {
                     type: "basic",
                     title: document.querySelector(".tweet .user").textContent.trim(),
-                    message: document.querySelector(".tweet .body").textContent,
+                    message: ' ' + document.querySelector(".tweet .body").textContent,
                     iconUrl: document.querySelector(".tweet img").src
                 }
             }
