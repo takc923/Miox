@@ -1,32 +1,29 @@
-document.onreadystatechange = function () {
-    var defaultTitle = document.title;
-    if (document.readyState != "complete") return;
-    chrome.storage.sync.get("mioUrl", function(items) {
-        if (! isMioHome(items.mioUrl)) return;
+var defaultTitle = document.title;
+chrome.storage.sync.get("mioUrl", function(items) {
+    if (! isMioHome(items.mioUrl)) return;
 
-        var tweets = document.querySelector(".tweets ul");
-        tweets.addEventListener("DOMSubtreeModified",function(){
-            chrome.runtime.sendMessage({
-                action: "isActive"
-            }, function(res){
-                if (res.isActive) return;
-                incrementTitleUnreadCount();
-                notice();
-            });
+    var tweets = document.querySelector(".tweets ul");
+    tweets.addEventListener("DOMSubtreeModified",function(){
+        chrome.runtime.sendMessage({
+            action: "isActive"
+        }, function(res){
+            if (res.isActive) return;
+            incrementTitleUnreadCount();
+            notice();
         });
-
-        window.addEventListener("focus", function (){
-            document.title = defaultTitle;
-        });
-
-        document.getElementById("body").onkeypress = function(evt){
-            if (evt.keyCode == 13 && evt.shiftKey) {
-                document.getElementsByName("commit")[0].click();
-                return false;
-            }
-        };
     });
-};
+
+    window.addEventListener("focus", function (){
+        document.title = defaultTitle;
+    });
+
+    document.getElementById("body").onkeypress = function(evt){
+        if (evt.keyCode == 13 && evt.shiftKey) {
+            document.getElementsByName("commit")[0].click();
+            return false;
+        }
+    };
+});
 
 function notice() {
     chrome.storage.sync.get("isNotificationEnabled", function(items) {
