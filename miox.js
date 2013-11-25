@@ -7,6 +7,7 @@ chrome.storage.sync.get("mioUrl", function(items) {
         chrome.runtime.sendMessage({
             action: "isActive"
         }, function(res){
+            document.getElementById("body").readOnly = false;
             if (res.isActive) return;
             incrementTitleUnreadCount();
             notice();
@@ -18,8 +19,10 @@ chrome.storage.sync.get("mioUrl", function(items) {
     });
 
     document.getElementById("body").onkeypress = function(evt){
-        if (evt.keyCode == 13 && evt.shiftKey) {
+        if (evt.keyCode == 13 && evt.shiftKey) { // Shift + Enter
             document.getElementsByName("commit")[0].click();
+            // todo: これだけじゃなくて、loading iconの表示とかしたいなあ。
+            this.readOnly = true;
             return false;
         }
     };
