@@ -13,5 +13,6 @@
         "scripts": ["background.js"]
     },
     "options_page": "options.html",
-    "permissions": ["tabs", "storage", "notifications", "<all_urls>"]
+    "permissions": ["tabs", "storage", "notifications", "<all_urls>"],
+    "web_accessible_resources": ["loading.gif"]
 }

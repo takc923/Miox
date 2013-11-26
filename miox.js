@@ -1,13 +1,17 @@
 var defaultTitle = document.title;
+var loadingIconUrl = chrome.runtime.getURL("loading.gif");
+
 chrome.storage.sync.get("mioUrl", function(items) {
     if (! isMioHome(items.mioUrl)) return;
 
     var tweets = document.querySelector(".tweets ul");
+    var body = document.getElementById("body");
     tweets.addEventListener("DOMSubtreeModified",function(){
         chrome.runtime.sendMessage({
             action: "isActive"
         }, function(res){
-            document.getElementById("body").readOnly = false;
+            body.style.background = 'white';
+            body.readOnly = false;
             if (res.isActive) return;
             incrementTitleUnreadCount();
             notice();
@@ -18,10 +22,10 @@ chrome.storage.sync.get("mioUrl", function(items) {
         document.title = defaultTitle;
     });
 
-    document.getElementById("body").onkeypress = function(evt){
+    body.onkeypress = function(evt){
         if (evt.keyCode == 13 && evt.shiftKey) { // Shift + Enter
             document.getElementsByName("commit")[0].click();
-            // todo: これだけじゃなくて、loading iconの表示とかしたいなあ。
+            this.style.background = "url(" + loadingIconUrl + ") center center no-repeat";
             this.readOnly = true;
             return false;
         }
