@@ -11,7 +11,7 @@ chrome.storage.sync.get("mioUrl", function(items) {
             action: "isActive"
         }, function(res){
             body.style.background = 'white';
-            body.readOnly = false;
+            body.disabled = false;
             if (res.isActive) return;
             incrementTitleUnreadCount();
             notice();
@@ -26,7 +26,7 @@ chrome.storage.sync.get("mioUrl", function(items) {
         if (evt.keyCode == 13 && evt.shiftKey) { // Shift + Enter
             document.getElementsByName("commit")[0].click();
             this.style.background = "url(" + loadingIconUrl + ") center center no-repeat";
-            this.readOnly = true;
+            this.disabled = true;
             return false;
         }
     };
